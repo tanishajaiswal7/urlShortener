@@ -10,7 +10,7 @@ export const shortenUrl = async (req, res) => {
     }
     
     const shortUrl = generateShortUrl();
-    const url = new Url({ originalUrl, shortUrl });
+    const url = new Url({ originalUrl, shortUrl, userId: req.user._id });
     await url.save();
 
     res.json({
@@ -25,7 +25,7 @@ export const shortenUrl = async (req, res) => {
 
 export const getAllUrls = async (req, res) => {
   try {
-    const urls = await Url.find().sort({ createdAt: -1 });
+    const urls = await Url.find({ userId: req.user._id }).sort({ createdAt: -1 });
     res.json(urls);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
