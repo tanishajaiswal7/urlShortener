@@ -8,6 +8,7 @@ interface Url {
   shortUrl: string;
   clicks: number;
   createdAt: string;
+  isPasswordProtected: boolean;
 }
 
 interface UrlListProps {
@@ -20,7 +21,7 @@ export default function UrlList({ urls }: UrlListProps) {
 
   const copyToClipboard = async (url: string) => {
     try {
-      await navigator.clipboard.writeText(`https://2261-152-59-119-156.ngrok-free.app/${url}`);
+      await navigator.clipboard.writeText(`${process.env.BACKEND_URL}/${url}`);
       setCopiedUrl(url);
       setTimeout(() => setCopiedUrl(null), 2000);
     } catch (error) {
@@ -84,69 +85,77 @@ export default function UrlList({ urls }: UrlListProps) {
               <div key={url._id} className="url-card">
                 <div className="url-header">
                   <div className="url-info">
-                                         <div className="original-url">
-                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                         <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                         <line x1="9" y1="9" x2="9.01" y2="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                         <line x1="15" y1="9" x2="15.01" y2="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                       </svg>
-                       <span className="url-domain">{formatUrl(url.originalUrl)}</span>
-                     </div>
+                    <div className="original-url">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <line x1="9" y1="9" x2="9.01" y2="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <line x1="15" y1="9" x2="15.01" y2="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      <span className="url-domain">{formatUrl(url.originalUrl)}</span>
+                      {url.isPasswordProtected && (
+                        <div className="lock-indicator" title="Password protected">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
+                          </svg>
+                        </div>
+                      )}
+                    </div>
                     <div className="url-meta">
                       <span className="url-date">{formatDate(url.createdAt)}</span>
                     </div>
                   </div>
                   <div className="url-stats">
-                                         <div className="click-count">
-                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                         <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                       </svg>
-                       <span>{url.clicks} clicks</span>
-                     </div>
+                    <div className="click-count">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                      <span>{url.clicks} clicks</span>
+                    </div>
                   </div>
                 </div>
                 
                 <div className="short-url-section">
                   <div className="short-url-container">
-                                         <a 
-                       href={`https://2261-152-59-119-156.ngrok-free.app/${url.shortUrl}`} 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="short-url-link"
-                     >
-                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                       </svg>
-                       localhost:5000/{url.shortUrl}
-                     </a>
+                    <a 
+                      href={`${process.env.BACKEND_URL}/${url.shortUrl}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="short-url-link"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      {process.env.BACKEND_URL?.replace('http://', '')}/{url.shortUrl}
+                    </a>
                     <div className="short-url-actions">
                       <button 
                         onClick={() => copyToClipboard(url.shortUrl)}
                         className={`copy-btn ${copiedUrl === url.shortUrl ? 'copied' : ''}`}
                         title="Copy to clipboard"
                       >
-                                               {copiedUrl === url.shortUrl ? (
-                           <>
-                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                               <polyline points="20,6 9,17 4,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                             </svg>
-                             Copied!
-                           </>
-                         ) : (
-                           <>
-                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                               <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
-                               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="2"/>
-                             </svg>
-                             Copy
-                           </>
-                         )}
+                        {copiedUrl === url.shortUrl ? (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <polyline points="20,6 9,17 4,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="2"/>
+                            </svg>
+                            Copy
+                          </>
+                        )}
                       </button>
                       <button 
-                        onClick={() => setQrModalUrl(`https://2261-152-59-119-156.ngrok-free.app/${url.shortUrl}`)}
+                        onClick={() => setQrModalUrl(`${process.env.BACKEND_URL}/${url.shortUrl}`)}
                         className="qr-btn"
                         title="Generate QR Code"
                       >

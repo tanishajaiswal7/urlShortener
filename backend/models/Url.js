@@ -15,16 +15,30 @@ const urlSchema = new mongoose.Schema(
         type: Number, 
         default: 0 
     },
-    // we now need to pass in the user id to the url model
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    }
+        required: true,
+    },
+    isPasswordProtected: { 
+        type: Boolean, 
+        default: false 
+    },
+    isActive: {
+        type: Boolean, 
+        default: true 
+    },
+    password: { 
+        type: String,
+        required:false,
+    },
+    passwordAttempts: { 
+        type: Number, 
+        default: 0 
+    },
 }, 
 {
     timestamps: true
-}
+} 
 );
 
 export default mongoose.model('Url', urlSchema); 

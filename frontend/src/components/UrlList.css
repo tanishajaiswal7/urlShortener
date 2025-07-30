@@ -153,25 +153,49 @@
 .original-url {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 4px;
 }
 
 .original-url svg {
-  color: #667eea;
+  stroke: currentColor;
+  fill: none;
   flex-shrink: 0;
 }
 
 .url-domain {
-  font-size: 0.875rem;
-  color: #1e293b;
-  font-weight: 600;
-  word-break: break-all;
-  line-height: 1.4;
+  font-weight: 500;
+  color: #374151;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lock-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-radius: 6px;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  transition: all 0.3s ease;
+}
+
+.lock-indicator:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.lock-indicator svg {
+  stroke: currentColor;
+  fill: none;
 }
 
 .url-meta {

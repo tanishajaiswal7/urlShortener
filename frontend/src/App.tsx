@@ -12,6 +12,7 @@ interface Url {
   shortUrl: string;
   clicks: number;
   createdAt: string;
+  isPasswordProtected: boolean;
 }
 
 interface User {
@@ -51,7 +52,7 @@ function App() {
     if (!token) return
     
     try {
-      const response = await fetch('http://localhost:5000/api/urls', {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/urls`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -68,7 +69,7 @@ function App() {
     setAuthError('')
 
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/${mode}`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/auth/${mode}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
