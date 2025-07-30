@@ -30,11 +30,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // }));
 app.use(cors());
 // whats happening now ??
-// app.use(cors({
-//   origin: '*',
-//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-//   credentials: false
-// }));
+app.use(cors({
+  origin: 'https://url-shortener-pi-coral.vercel.app/',
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
